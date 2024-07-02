@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filter Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+        .filter-form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .filter-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+        h2 {
+            margin-top: 60px;
+            margin-bottom: 0px;
+            font-size: 15px;
+            font-family: Arial, sans-serif;
+            text-align: left;
+            font-weight: bold;
+        }
+        button {
+            background-color: #fff;
+            color: #000;
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 95%;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            background-color: #f0f0f0;
+        }
+        .filter-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        select, input[type="text"], input[type="date"] {
+            width: calc(100% - 16px);
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            display: block;
+            box-sizing: border-box;
+        }
+        .slider-container {
+            position: relative;
+            height: 30px;
+            margin-bottom: 20px;
+        }
+        .slider-track {
+            width: 100%;
+            height: 5px;
+            background: rgb(204, 204, 204);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .slider-range {
+            position: absolute;
+            height: 5px;
+            background: blue;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .slider-thumb {
+            width: 20px;
+            height: 20px;
+            background: blue;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+        }
+        .slider-thumb:first-child {
+            left: 0;
+        }
+        .slider-thumb:last-child {
+            right: 0;
+        }
+        .slider-values {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+        }
+        .price-box {
+            background-color: rgb(219, 219, 219);
+            padding: 5px; 
+            border-radius: 4px; 
+            margin: 0 5px; 
+        }
+        .price-range {
+            color: black;
+        }
+        @media (max-width: 480px) {
+            .filter-form {
+                padding: 15px;
+                width: 100%;
+            }
+            button, select, input[type="text"], input[type="date"] {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="filter-form-container">
+        <div class="filter-form">
+            <h2>FILTER</h2>
+            <button id="clearFilters" onclick="clearFilters()">CLEAR ALL FILTERS</button>
+            
+            <div class="filter-group">
+                <label for="country">Country:</label>
+                <select id="country" onchange="updateCities()">
+                    <option value="">Select a country</option>
+                    <option value="India">India</option>
+                    <option value="USA">USA</option>
+                    <option value="Canada">Canada</option>
+                    <option value="Germany">Germany</option>
+                    <option value="UK">UK</option>
+                    <option value="Mexico">Mexico</option>
+                    <option value="Italy">Italy</option>               
+                    
+                    
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="city">City:</label>
+                <select id="city">
+                    <option value="">Select a city</option>
+                    <!-- Options will be populated based on the selected country -->
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="hotel">Hotel:</label>
+                <input type="text" id="hotels" placeholder="Enter your Hotel name">
+                    
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="stars">Stars:</label>
+                <select id="stars">
+                    <option value="">Select stars</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="from-date">Date:</label>
+                <label for="from-date"></label>
+                <input type="date" id="from-date">
+                <label for="to-date"></label>
+                <input type="date" id="to-date">
+            </div>
+
+            <div class="filter-group">
+                <label for="reviews">Reviews:</label>
+                <input type="text" id="reviews" placeholder="Enter your reviews">
+            </div>
+
+            <div class="filter-group">
+                <label for="price-range">Price:</label>
+                <div class="slider-container">
+                    <div class="slider-track"></div>
+                    <div class="slider-range" id="slider-range"></div>
+                    <div class="slider-thumb" id="thumb-min"></div>
+                    <div class="slider-thumb" id="thumb-max"></div>
+                </div>
+                <div class="slider-values">
+                    <div class="price-box">
+                        <span id="price-min-value" class="price-range">220.00</span>
+                    </div>
+                    <div class="price-box">
+                        <span id="price-max-value" class="price-range">2050.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const citiesByCountry = {
+            India: ['Delhi', 'Mumbai', 'Bangalore', 'Chennai', 'Kolkata'],
+            USA: ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix'],
+            Canada: ['Toronto', 'Vancouver', 'Montreal', 'Calgary', 'Ottawa'],
+            Germany: ['Berlin', 'Hamburg', 'Munich', 'Cologne', 'Frankfurt'],
+            UK: ['London', 'Machester', 'Liverpool', 'Birmingham', 'Edinburgh'],
+            Mexico: ['Merida', 'Monterrey', 'Guadalajara', 'Puebla', 'Tijuana'],
+            Italy: ['Florence', 'Rome', 'Bologna', 'Genoa', 'Venice'],
+        };
+
+        function updateCities() {
+            const countrySelect = document.getElementById('country');
+            const citySelect = document.getElementById('city');
+            const selectedCountry = countrySelect.value;
+
+            // Clear existing city options
+            citySelect.innerHTML = '<option value="">Select a city</option>';
+
+            // Populate city options based on selected country
+            if (citiesByCountry[selectedCountry]) {
+                citiesByCountry[selectedCountry].forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        }
+
+        const thumbMin = document.getElementById('thumb-min');
+        const thumbMax = document.getElementById('thumb-max');
+        const sliderRange = document.getElementById('slider-range');
+        const minValueElem = document.getElementById('price-min-value');
+        const maxValueElem = document.getElementById('price-max-value');
+
+        let minValue = 220;
+        let maxValue = 2050;
+        const minRange = 220;
+        const maxRange = 2050;
+
+        function updateSlider() {
+            const minPercent = ((minValue - minRange) / (maxRange - minRange)) * 100;
+            const maxPercent = ((maxValue - minRange) / (maxRange - minRange)) * 100;
+            thumbMin.style.left = minPercent + '%';
+            thumbMax.style.left = maxPercent + '%';
+            sliderRange.style.left = minPercent + '%';
+            sliderRange.style.width = (maxPercent - minPercent) + '%';
+            minValueElem.textContent = minValue.toFixed(2);
+            maxValueElem.textContent = maxValue.toFixed(2);
+        }
+
+        function setSliderValue(value, isMin) {
+            if (isMin) {
+                minValue = Math.min(Math.max(value, minRange), maxValue - 1);
+            } else {
+                maxValue = Math.max(Math.min(value, maxRange), minValue + 1);
+            }
+            updateSlider();
+        }
+
+        thumbMin.addEventListener('mousedown', (e) => {
+            const moveHandler = (e) => {
+                const rect = thumbMin.parentNode.getBoundingClientRect();
+                const value = minRange + ((e.clientX - rect.left) / rect.width) * (maxRange - minRange);
+                setSliderValue(value, true);
+            };
+            document.addEventListener('mousemove', moveHandler);
+            document.addEventListener('mouseup', () => {
+                document.removeEventListener('mousemove', moveHandler);
+            }, { once: true });
+        });
+
+        thumbMax.addEventListener('mousedown', (e) => {
+            const moveHandler = (e) => {
+                const rect = thumbMax.parentNode.getBoundingClientRect();
+                const value = minRange + ((e.clientX - rect.left) / rect.width) * (maxRange - minRange);
+                setSliderValue(value, false);
+            };
+            document.addEventListener('mousemove', moveHandler);
+            document.addEventListener('mouseup', () => {
+                document.removeEventListener('mousemove', moveHandler);
+            }, { once: true });
+        });
+
+        function clearFilters() {
+            document.getElementById('country').value = '';
+            document.getElementById('city').value = '';
+            document.getElementById('hotel').value = '';
+            document.getElementById('stars').value = '';
+            document.getElementById('from-date').value = '';
+            document.getElementById('to-date').value = '';
+            document.getElementById('reviews').value = '';
+            minValue = minRange;
+            maxValue = maxRange;
+            updateSlider();
+        }
+
+        function validateTextInput(input) {
+            input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
+        }
+
+        updateSlider();
+    </script>
+</body>
+</html>
